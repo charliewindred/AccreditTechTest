@@ -1,0 +1,15 @@
+﻿.description {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+
+.repo-card {
+    width: 15rem;
+    height: 15rem;
+}
+
+.avatar {
+    border-radius: 50%;
+}

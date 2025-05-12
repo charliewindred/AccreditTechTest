@@ -1,0 +1,65 @@
+﻿@model AccreditTechTest.Models.IndexViewModel
+
+<link rel="stylesheet" href="~/Content/Index.css">
+
+<main>
+    <section id="search">
+        <h2 class="mb-3">Search GitHub User</h2>
+        @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group d-inline-flex gap-3">
+                @Html.LabelFor(m => m.SearchViewModel.Username, new {@class="d-none"}) 
+                @Html.TextBoxFor(m => m.SearchViewModel.Username, new
+                {
+                   @class = "form-control form-control-lg",
+                   placeholder = "Enter GitHub username"
+                 })
+                <button type="submit" class="btn btn-primary">🔍</button>
+            </div>
+            <div class="mt-3">
+                @Html.ValidationMessageFor(m => m.SearchViewModel.Username, "", new { @class = "text-danger" })
+            </div>
+        }
+    </section>
+
+    <section id="user-profile">
+        @if (Model != null)
+        {
+            <hr>
+            <div class="d-flex justify-content-start">
+                <div class="flex-column">
+                    <img class="avatar mb-3" src="@Model.UserReposViewModel.User.AvatarUrl" width="260" height="260" alt="Avatar">
+                    <h2>@(Model.UserReposViewModel.User.Name)</h2>
+                    <h3 class="text-muted mb-3">@(Model.UserReposViewModel.User.Login)</h3>
+                    <h5>📍 @(string.IsNullOrWhiteSpace(@Model.UserReposViewModel.User.Location) ? "No location specified" : Model.UserReposViewModel.User.Location)</h5>
+                </div>
+            </div>
+            <hr>
+            <h3 class="mb-3">Top Repos</h3>
+            if (Model.UserReposViewModel.Repos.Count > 0)
+            {
+                <div class="d-flex flex-wrap justify-content-evenly gap-3">
+                    @foreach (var repo in Model.UserReposViewModel.Repos)
+                    {
+                        <div class="card shadow-sm repo-card">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">
+                                    <a href="@repo.Url" target="_blank" class="text-decoration-none">@repo.Name</a>
+                                </h5>
+                                <p class="card-text text-muted text-wrap description">@(string.IsNullOrWhiteSpace(repo.Description) ? "No description provided." : repo.Description)</p>
+                                <div class="mt-auto">
+                                    <span class="badge bg-primary">⭐ @repo.StargazersCount</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <h5>No public repos found.</h5>
+            }
+        }
+    </section>
+</main>
